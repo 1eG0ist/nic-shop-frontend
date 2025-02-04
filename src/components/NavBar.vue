@@ -1,32 +1,45 @@
 <template>
   <div class="navbar">
-    <div class="user-info" v-if="isAuthenticated">
-      <span class="fio">{{ user.surname }} {{ user.name.charAt(0).toUpperCase() }}.</span>
-      <div @click="logout" style="cursor: pointer">Выйти</div>
-    </div>
-    <router-link to="/login" v-else>Войти</router-link>
-    <div class="cart">
-      Корзина
+    <div class="catalogue" @click="swapToCatalogue">Каталог</div>
+    <div class="right-section">
+      <div class="user-info" v-if="isAuthenticated">
+        <span class="fio">{{ user.surname }} {{ user.name.charAt(0).toUpperCase() }}.</span>
+        <div @click="logout" class="logout">Выйти</div>
+      </div>
+      <router-link to="/login" v-else>Войти</router-link>
+      <div class="cart" @click="swapToCart">
+        <span class="cart-count" v-if="cartItemsCount > 0">{{ cartItemsCount }}</span>
+        Корзина
+      </div>
     </div>
   </div>
 </template>
 
-<script>
-import { mapActions, mapGetters } from "vuex";
+<script setup>
+import { computed } from 'vue';
+import { useRouter } from 'vue-router';
+import store from "@/store/index.js";
 
-export default {
-  name: 'nav-bar',
-  computed: {
-    ...mapGetters('auth', ['isAuthenticated', 'user']),
-  },
-  methods: {
-    ...mapActions('auth', ['logoutUser']),
-    logout() {
-      this.logoutUser();
-      this.$router.push('/login');
-    },
-  },
+const router = useRouter();
+
+const isAuthenticated = computed(() => store.getters['auth/isAuthenticated']);
+const user = computed(() => store.getters['auth/user']);
+const totalItemsInCart = computed(() => store.getters['cart/totalItemsInCart']);
+
+const cartItemsCount = computed(() => totalItemsInCart.value);
+
+const swapToCatalogue = () => {
+  router.push({ path: '/'});
+}
+
+const logout = () => {
+  store.dispatch('auth/logoutUser');
+  router.push('/login');
 };
+
+const swapToCart = () => {
+  router.push({ path: '/cart' });
+}
 </script>
 
 <style scoped>
@@ -34,37 +47,63 @@ export default {
   width: 100%;
   background: var(--background-secondary-color);
   height: 50px;
-  margin: 0 auto;
   display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: right;
-  padding-right: 200px;
-  gap: 40px;
+  justify-content: space-between;
+  padding: 0 20px 0 20px;
+  position: sticky;
+  top: 0;
 }
 
-.navbar a {
-  margin: 0 10px;
-  text-decoration: none;
-  color: inherit;
+.catalogue {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.right-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 40px;
 }
 
 .user-info {
   display: flex;
   align-items: center;
-}
-
-.user-info span {
-  margin-right: 10px;
-}
-
-.cart {
-  align-self: center;
-  align-items: center;
+  gap: 10px;
 }
 
 .fio {
   color: blue;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: bold;
+}
+
+.logout {
+  cursor: pointer;
+  color: red;
+}
+
+.cart {
+  cursor: pointer;
+  font-weight: bold;
+  position: relative;
+}
+
+.cart-count {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: inherit;
 }
 </style>

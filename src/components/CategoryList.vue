@@ -1,7 +1,7 @@
 <template>
   <div class="category-list">
     <button @click="toggleMenu" class="menu-button">
-      <span class="menu-icon">&#9776;</span>
+      <span class="menu-icon" style="color: black; font-size: 30px">&#9776;</span>
     </button>
     <div v-if="isMenuOpen" class="category-menu">
       <CategoryTree :categories="categories" @category-selected="handleCategorySelected" />
@@ -12,7 +12,7 @@
 <script>
 import axios from 'axios';
 import CategoryTree from './CategoryTree.vue';
-import { reactive } from 'vue';
+import {reactive} from 'vue';
 
 export default {
   components: {
@@ -40,15 +40,7 @@ export default {
       }
     },
     handleCategorySelected(category) {
-      this.fetchProductsByCategory(category.id);
-    },
-    async fetchProductsByCategory(categoryId) {
-      try {
-        const response = await axios.get(`/api/products/by_category?id=${categoryId}&page=0`);
-        this.$emit('products-loaded', response.data.content);
-      } catch (error) {
-        console.error('Ошибка при получении продуктов:', error);
-      }
+      this.$emit('category-selected', category.id); // Передаем categoryId в родительский компонент
     },
   },
   mounted() {
@@ -58,23 +50,13 @@ export default {
 </script>
 
 <style scoped>
-.category-list {
-  background-color: #f4f4f4;
-  padding: 10px;
-}
-
-.menu-button {
-  background: none;
-  border: none;
-  font-size: 24px;
+button {
   cursor: pointer;
-}
-
-.menu-icon {
-  display: inline-block;
+  border: none;
+  background: var(--background-secondary-color);
 }
 
 .category-menu {
-  margin-top: 10px;
+  background: var(--background-secondary-color);
 }
 </style>

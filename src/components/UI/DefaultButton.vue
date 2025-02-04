@@ -11,7 +11,7 @@
 .default-button {
   padding: 10px 20px;
   background: linear-gradient(155deg, var(--primary-color), var(--secondary-color));
-  color: white;
+  color: var(--text-color);
   border: none;
   border-radius: 25px;
   cursor: pointer;
@@ -22,7 +22,8 @@
 }
 
 .default-button:hover {
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  background: linear-gradient(105deg, var(--primary-color), var(--secondary-color));
+  filter: brightness(0.95);
 }
 
 .default-button:focus {
