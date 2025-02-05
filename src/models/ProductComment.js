@@ -16,4 +16,10 @@ export class ProductComment {
     rating;
     comment;
     imagePath;
+
+    static fromJsons(jsons) {
+        return jsons.map(
+            productComment => new ProductComment(productComment)
+        );
+    }
 }

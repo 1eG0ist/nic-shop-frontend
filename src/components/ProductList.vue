@@ -41,9 +41,9 @@ export default {
           const response = await axios.get(`/api/products/by_category?id=${props.categoryId}&page=${pageNumber}`);
           totalPages.value = Math.ceil(response.headers['x-total-count'] / limit);
           if (pageNumber === 0) {
-            products.value = Product.fromJson(response.data.content);
+            products.value = Product.fromJsons(response.data.content);
           } else {
-            products.value = [...products.value, ...Product.fromJson(response.data.content)];
+            products.value = [...products.value, ...Product.fromJsons(response.data.content)];
           }
         }
       } catch (error) {
@@ -61,14 +61,14 @@ export default {
     };
 
     onMounted(() => {
-      fetchProducts(0); // Загружаем первую страницу при монтировании
+      fetchProducts(0);
     });
 
     watch(() => props.categoryId, (newCategoryId) => {
       if (newCategoryId !== null) {
-        products.value = []; // Очищаем список продуктов при смене категории
+        products.value = [];
         page.value = 0;
-        fetchProducts(0); // Загружаем первую страницу для новой категории
+        fetchProducts(0);
       }
     });
 

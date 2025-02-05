@@ -13,6 +13,7 @@
 import axios from 'axios';
 import CategoryTree from './CategoryTree.vue';
 import {reactive} from 'vue';
+import api from "@/api/axios.js";
 
 export default {
   components: {
@@ -30,7 +31,7 @@ export default {
     },
     async fetchCategories() {
       try {
-        const response = await axios.get('/api/categories');
+        const response = await api.get('categories');
         this.categories = response.data.map(category => ({
           ...category,
           isOpen: false,

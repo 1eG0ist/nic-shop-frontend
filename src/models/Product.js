@@ -18,7 +18,11 @@ export class Product {
     imagePath;
     sale;
 
+    static fromJsons(jsons) {
+        return jsons.map(product => new Product(product));
+    }
+
     static fromJson(json) {
-        return json.map(product => new Product(product));
+        return new Product(json);
     }
 }

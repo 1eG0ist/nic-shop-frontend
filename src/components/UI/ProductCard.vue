@@ -1,6 +1,6 @@
 <template>
   <div class="product-card">
-    <div class="product-info">
+    <div class="product-info" @click="swapToProduct">
       <h2 class="product-name">{{ product.name }}</h2>
       <p class="product-description">{{ product.description }}</p>
       <div class="product-price">
@@ -25,6 +25,7 @@ import { defineProps, computed } from 'vue';
 import { Product } from "@/models/Product.js";
 import DefaultButton from "@/components/UI/DefaultButton.vue";
 import store from "@/store/index.js";
+import router from '@/router/index.js';
 
 const props = defineProps({
   product: {
@@ -65,6 +66,14 @@ const availabilityClass = computed(() => {
 const addToCart = () => {
   store.dispatch('cart/addToCart', props.product);
 };
+
+const swapToProduct = () => {
+  router.push({
+    path: "/product",
+    query: { product: JSON.stringify(props.product) }
+  });
+};
+
 </script>
 
 <style scoped>
