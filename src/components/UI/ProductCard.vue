@@ -1,6 +1,7 @@
 <template>
-  <div class="product-card">
-    <div class="product-info" @click="swapToProduct">
+  <div class="product-card" @click="swapToProductPage">
+    <img class="product-card-img" type="png" :src="imageUrl" :alt="`${product.name} image`"/>
+    <div class="product-info">
       <h2 class="product-name">{{ product.name }}</h2>
       <p class="product-description">{{ product.description }}</p>
       <div class="product-price">
@@ -21,11 +22,11 @@
 </template>
 
 <script setup>
-import { defineProps, computed } from 'vue';
-import { Product } from "@/models/Product.js";
+import {defineProps, computed} from 'vue';
+import {Product} from "@/models/Product.js";
 import DefaultButton from "@/components/UI/DefaultButton.vue";
 import store from "@/store/index.js";
-import router from '@/router/index.js';
+import router from "@/router/index.js";
 
 const props = defineProps({
   product: {
@@ -63,23 +64,25 @@ const availabilityClass = computed(() => {
   }
 });
 
+const swapToProductPage = () => {
+  router.push({
+    path: '/product',
+    query: { product: JSON.stringify(props.product) }
+  });}
+
 const addToCart = () => {
   store.dispatch('cart/addToCart', props.product);
 };
 
-const swapToProduct = () => {
-  router.push({
-    path: "/product",
-    query: { product: JSON.stringify(props.product) }
-  });
-};
-
+const imageUrl = computed(() => {
+  return '/api/images?path=' + props.product.imagePath;
+});
 </script>
 
 <style scoped>
 .product-card {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   background-color: var(--background-color);
   border: 1px solid var(--border-color);
   border-radius: 8px;
@@ -88,6 +91,15 @@ const swapToProduct = () => {
   transition: box-shadow 0.2s, transform 0.2s;
   padding: 16px;
   margin-bottom: 10px;
+  gap: 16px;
+}
+
+.product-card-img {
+  height: 200px;
+  width: 200px;
+  object-fit: cover; /* Обрезает изображение, чтобы оно покрывало всю область */
+  object-position: center; /* Центрирует изображение */
+  background: transparent;
 }
 
 .product-card:hover {

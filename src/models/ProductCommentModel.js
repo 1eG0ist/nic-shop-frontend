@@ -1,4 +1,4 @@
-export class ProductComment {
+export class ProductCommentModel {
     constructor(data) {
         this.id = data.id;
         this.createdDate = data.createdDate;
@@ -19,7 +19,7 @@ export class ProductComment {
 
     static fromJsons(jsons) {
         return jsons.map(
-            productComment => new ProductComment(productComment)
+            productComment => new ProductCommentModel(productComment)
         );
     }
 }

@@ -21,7 +21,12 @@ export default defineConfig({
         target: 'http://localhost:8080', // Ваш сервер на HTTP
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '') // Убирает префикс /api
-      }
+      },
+      '/images': {
+        target: 'http://localhost:8080/images', // Ваш сервер на HTTP
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/images/, ''), // Убирает префикс /images
+      },
     }
   }
 })

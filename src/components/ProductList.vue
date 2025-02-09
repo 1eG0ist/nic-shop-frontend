@@ -9,7 +9,7 @@
     <div v-if="isProductsLoading">
       Идет загрузка...
     </div>
-    <div class="observe" v-intersection="loadMoreProducts"></div>
+    <div class="observe" v-intersection="loadMoreProducts"/>
   </div>
 </template>
 

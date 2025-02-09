@@ -1,6 +1,6 @@
 <template>
   <div class="product-info">
-<!--    <img :src="product.imagePath" :alt="product.name" class="product-image" />-->
+    <img :src="`/api/images?path=${ props.product.imagePath }`" :alt="product.name" class="product-image" />
     <h1>{{ product.name }}</h1>
     <p>{{ product.description }}</p>
     <p>Цена: {{ product.price }} руб.</p>
@@ -12,7 +12,7 @@
 <script setup>
 import {Product} from "@/models/Product.js";
 
-defineProps({
+const props = defineProps({
   product: {
     type: Product,
     required: true,
@@ -22,7 +22,6 @@ defineProps({
 
 <style scoped>
 .product-info {
-  padding: 10px;
   text-align: start;
 }
 
