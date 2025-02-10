@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from '@/api/axios.js';
 import DefaultBox from "@/components/UI/DefaultBox.vue";
 import DefaultInput from "@/components/UI/DefaultInput.vue";
 import DefaultButton from "@/components/UI/DefaultButton.vue";
@@ -37,7 +37,7 @@ export default {
 
     async register() {
       try {
-        const response = (await axios.post('api/auth/registration', {
+        const response = (await axios.post('auth/registration', {
           name: this.name,
           surname: this.surname,
           email: this.email,

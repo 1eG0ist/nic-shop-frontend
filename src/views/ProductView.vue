@@ -2,7 +2,8 @@
   <div class="product-view">
     <div v-if="product != null">
       <ProductInfo :product="product" />
-      <ProductComments :product-id="product.id" />
+      <div class="divider"/>
+      <ProductComments :product="product" />
     </div>
   </div>
 </template>
@@ -26,13 +27,19 @@ onMounted(() => {
       console.error("Ошибка парсинга JSON:", error);
     }
   }
-  console.log(product);
-  console.log(product.value);
 });
 </script>
 
 <style scoped>
 .product-view {
   padding: 20px;
+}
+
+.divider {
+  height: 3px;
+  width: 100%;
+  border-radius: 10px;
+  background-color: var(--secondary-color);
+  margin-bottom: 10px;
 }
 </style>

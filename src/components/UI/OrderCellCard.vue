@@ -1,5 +1,6 @@
 <template>
   <div class="order-cell-card">
+    <img class="order-cell-card-img" type="png" :src="imageUrl" :alt="`${props.orderCell.product.name} image`"/>
     <div class="product-info">
       <h3>{{ orderCell.product.name }}</h3>
       <p>{{ orderCell.product.description }}</p>
@@ -61,12 +62,16 @@ const decreaseQuantity = () => {
 const removeFromCart = () => {
   store.commit('cart/REMOVE_FROM_CART', props.orderCell.product.id);
 };
+
+const imageUrl = computed(() => {
+  return '/api/images?path=' + props.orderCell.product.imagePath;
+});
 </script>
 
 <style scoped>
 .order-cell-card {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   background-color: var(--background-color);
   border: 1px solid var(--border-color);
   border-radius: 8px;
@@ -83,6 +88,7 @@ const removeFromCart = () => {
 
 .product-info {
   flex: 1;
+  flex-direction: column;
 }
 
 .old-price {
@@ -151,5 +157,13 @@ const removeFromCart = () => {
   flex-direction: row;
   justify-content: center;
   gap: 10px
+}
+
+.order-cell-card-img {
+  height: 200px;
+  width: 200px;
+  object-fit: cover;
+  object-position: center;
+  background: transparent;
 }
 </style>

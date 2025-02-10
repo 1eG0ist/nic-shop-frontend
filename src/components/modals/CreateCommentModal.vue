@@ -3,7 +3,7 @@
     <div class="modal">
       <h2>Добавить комментарий</h2>
 
-      <textarea v-model="commentText" placeholder="Введите комментарий"></textarea>
+      <default-input v-model="commentText" placeholder="Введите комментарий"/>
 
       <div class="rating">
         <label>Оценка:</label>
@@ -30,6 +30,7 @@
 import { ref, defineEmits } from "vue";
 import DefaultButton from "@/components/UI/DefaultButton.vue";
 import StarRating from "@/components/UI/StarRating.vue";
+import DefaultInput from "@/components/UI/DefaultInput.vue";
 
 const props = defineProps({
   isOpen: Boolean,
@@ -66,15 +67,15 @@ const close = () => {
 const submitComment = () => {
   if (commentText.value.trim() !== "") {
     const commentData = {
-      text: commentText.value,
+      comment: commentText.value,
       rating: rating.value,
-      imagePath: selectedFile.value ? selectedFile.value.name : null, // Пример: можно отправить имя файла, если нужно
+      image: selectedFile.value,
     };
-
-    console.log("AAAAAA" + commentText);
 
     emit("submit", commentData);
     close();
+  } else {
+    alert("Комментарий не может быть пустым")
   }
 };
 </script>
@@ -90,6 +91,7 @@ const submitComment = () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 100;
 }
 
 .modal {

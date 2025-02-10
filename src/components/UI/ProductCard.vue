@@ -11,7 +11,7 @@
         </div>
         <div :class="availabilityClass">{{ availabilityText }}</div>
         <default-button
-            @click="addToCart"
+            @click.stop="addToCart"
             :disabled="props.product.count === 0"
             class="add-to-cart-button">
           В корзину
@@ -97,8 +97,8 @@ const imageUrl = computed(() => {
 .product-card-img {
   height: 200px;
   width: 200px;
-  object-fit: cover; /* Обрезает изображение, чтобы оно покрывало всю область */
-  object-position: center; /* Центрирует изображение */
+  object-fit: cover;
+  object-position: center;
   background: transparent;
 }
 

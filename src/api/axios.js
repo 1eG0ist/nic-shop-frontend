@@ -1,5 +1,5 @@
-import axios from 'axios';
 import store from "@/store/index.js";
+import axios from "axios";
 
 const api = axios.create({
     baseURL: '/api',
@@ -40,7 +40,6 @@ api.interceptors.response.use(
 
         if (error.response.status === 401 && !originalRequest._retry) {
             if (isRefreshing) {
-                // if already updating - add request to queue
                 return new Promise((resolve, reject) => {
                     failedQueue.push({ resolve, reject });
                 })
@@ -67,7 +66,6 @@ api.interceptors.response.use(
                 processQueue(null, accessToken);
                 return api(originalRequest);
             } catch (refreshError) {
-                // logout if refresh token expired too, or something went wrong
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('refreshToken');
                 localStorage.removeItem('user');

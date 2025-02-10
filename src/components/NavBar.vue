@@ -34,6 +34,7 @@ const swapToCatalogue = () => {
 
 const logout = () => {
   store.dispatch('auth/logoutUser');
+  localStorage.clear();
   router.push('/login');
 };
 
