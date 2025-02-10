@@ -22,7 +22,7 @@
 }
 
 .default-button:hover {
-  background: linear-gradient(105deg, var(--primary-color), var(--secondary-color));
+  background: var(--main-gradient);
   filter: brightness(0.95);
 }
 

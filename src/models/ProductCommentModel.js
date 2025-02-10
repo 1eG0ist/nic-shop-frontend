@@ -1,4 +1,4 @@
-export class ProductComment {
+export class ProductCommentModel {
     constructor(data) {
         this.id = data.id;
         this.createdDate = data.createdDate;
@@ -16,4 +16,10 @@ export class ProductComment {
     rating;
     comment;
     imagePath;
+
+    static fromJsons(jsons) {
+        return jsons.map(
+            productComment => new ProductCommentModel(productComment)
+        );
+    }
 }

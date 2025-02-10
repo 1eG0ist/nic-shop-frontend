@@ -5,4 +5,9 @@ export class User {
         this.surname = data.surname;
         this.email = data.email;
     }
+
+    id;
+    name;
+    surname;
+    email;
 }

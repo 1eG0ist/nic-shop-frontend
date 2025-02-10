@@ -9,13 +9,13 @@
     <div v-if="isProductsLoading">
       Идет загрузка...
     </div>
-    <div class="observe" v-intersection="loadMoreProducts"></div>
+    <div class="observe" v-intersection="loadMoreProducts"/>
   </div>
 </template>
 
 <script>
 import {ref, onMounted, watch} from 'vue';
-import axios from 'axios';
+import axios from '@/api/axios.js';
 import ProductCard from "@/components/UI/ProductCard.vue";
 import {Product} from "@/models/Product.js";
 
@@ -38,12 +38,12 @@ export default {
       try {
         if (props.categoryId != null) {
           isProductsLoading.value = true;
-          const response = await axios.get(`/api/products/by_category?id=${props.categoryId}&page=${pageNumber}`);
+          const response = await axios.get(`/products/by_category?id=${props.categoryId}&page=${pageNumber}`);
           totalPages.value = Math.ceil(response.headers['x-total-count'] / limit);
           if (pageNumber === 0) {
-            products.value = Product.fromJson(response.data.content);
+            products.value = Product.fromJsons(response.data.content);
           } else {
-            products.value = [...products.value, ...Product.fromJson(response.data.content)];
+            products.value = [...products.value, ...Product.fromJsons(response.data.content)];
           }
         }
       } catch (error) {
@@ -61,14 +61,14 @@ export default {
     };
 
     onMounted(() => {
-      fetchProducts(0); // Загружаем первую страницу при монтировании
+      fetchProducts(0);
     });
 
     watch(() => props.categoryId, (newCategoryId) => {
       if (newCategoryId !== null) {
-        products.value = []; // Очищаем список продуктов при смене категории
+        products.value = [];
         page.value = 0;
-        fetchProducts(0); // Загружаем первую страницу для новой категории
+        fetchProducts(0);
       }
     });
 

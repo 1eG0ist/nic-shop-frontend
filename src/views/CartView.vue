@@ -32,7 +32,7 @@ import { computed } from 'vue';
 import OrderCellCard from '@/components/UI/OrderCellCard.vue';
 import store from "@/store/index.js";
 import DefaultButton from "@/components/UI/DefaultButton.vue";
-import axios from "axios";
+import axios from '@/api/axios.js';
 
 const orderCells = computed(() => store.state.cart.orderCells);
 const isAuthenticated = computed(() => store.getters['auth/isAuthenticated']);
@@ -56,14 +56,14 @@ const removeFromCart = (orderCell) => {
 const createOrder = async () => {
   if (isAuthenticated.value) {
     const response = await axios.post(
-        `/api/orders`,
+        `/orders`,
         orderCells.value.map(cell => ({
           productId: cell.product.id,
           count: cell.count,
         })),
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`, // TODO auto relogin
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             'Content-Type': 'application/json',
           }
         }
@@ -73,7 +73,6 @@ const createOrder = async () => {
       store.commit('cart/CLEAR_CART');
     } else {
       alert(response.statusText);
-      store.commit('cart/CLEAR_CART');
     }
   } else {
     alert('Для оформления заказа необходимо авторизоваться.');
