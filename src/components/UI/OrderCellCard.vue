@@ -11,7 +11,7 @@
         </div>
         <div class="count">
           <div class="quantity-controls">
-            <button @click="decreaseQuantity" :disabled="orderCell.count <= 1">-</button>
+            <button @click="decreaseQuantity">-</button>
             <span>{{ orderCell.count }}</span>
             <button @click="increaseQuantity" :disabled="!canIncrease">+</button>
           </div>
@@ -70,6 +70,8 @@ const imageUrl = computed(() => {
 
 <style scoped>
 .order-cell-card {
+  gap: 16px;
+  width: 100%;
   display: flex;
   flex-direction: row;
   background-color: var(--background-color);

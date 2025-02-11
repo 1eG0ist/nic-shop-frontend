@@ -1,7 +1,7 @@
 <template>
   <div class="product-page">
-    <CategoryList @category-selected="handleCategorySelected" />
-    <ProductList :categoryId="selectedCategoryId" />
+    <CategoryList @category-selected="handleCategorySelected" class="category-list"/>
+    <ProductList :category="selectedCategory" :categoryPath="selectedCategoryPath" />
   </div>
 </template>
 
@@ -16,14 +16,17 @@ export default {
     ProductList,
   },
   setup() {
-    const selectedCategoryId = ref(null);
+    const selectedCategory = ref(null);
+    const selectedCategoryPath = ref('');
 
-    const handleCategorySelected = (categoryId) => {
-      selectedCategoryId.value = categoryId;
+    const handleCategorySelected = ({category, path}) => {
+      selectedCategory.value = category;
+      selectedCategoryPath.value = "Главная / " + path.map(category => category.name).join(' / ');
     };
 
     return {
-      selectedCategoryId,
+      selectedCategory,
+      selectedCategoryPath,
       handleCategorySelected,
     };
   },
@@ -33,5 +36,12 @@ export default {
 <style>
 .product-page {
   display: flex;
+}
+
+.category-list {
+  position: fixed;
+  top: 0;
+  left: 0;
+
 }
 </style>

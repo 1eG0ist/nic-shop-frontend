@@ -39,8 +39,8 @@ export default {
         console.error('Ошибка при получении категорий:', error);
       }
     },
-    handleCategorySelected(category) {
-      this.$emit('category-selected', category.id); // Передаем categoryId в родительский компонент
+    handleCategorySelected({path}) {
+      this.$emit('category-selected', { category: path[path.length -1], path });
     },
   },
   mounted() {

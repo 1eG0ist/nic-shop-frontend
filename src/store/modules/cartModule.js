@@ -23,6 +23,8 @@ export const cartModule = {
             const orderCell = state.orderCells.find(cell => cell.product.id === productId);
             if (orderCell && orderCell.count > 1) {
                 orderCell.minus1();
+            } else {
+                state.orderCells = state.orderCells.filter(cell => cell.product.id !== productId);
             }
         },
         REMOVE_FROM_CART(state, productId) {

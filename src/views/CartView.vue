@@ -4,15 +4,18 @@
     <div v-if="orderCells.length <= 0">
       <p>Ваша корзина пуста</p>
     </div>
-    <div v-else>
-      <OrderCellCard
-          v-for="orderCell in orderCells"
-          :key="orderCell.product.id"
-          :orderCell="orderCell"
-          @update-quantity="updateQuantity"
-          @remove="removeFromCart"
-      />
+    <div v-else class="content">
+      <div class="products-list">
+        <OrderCellCard
+            v-for="orderCell in orderCells"
+            :key="orderCell.product.id"
+            :orderCell="orderCell"
+            @update-quantity="updateQuantity"
+            @remove="removeFromCart"
+        />
+      </div>
       <div class="sum-info">
+        <strong>Ваш заказ: </strong>
         <div>Количество товаров: {{ totalItems }}</div>
         <div>Общая сумма заказа: {{ totalPrice }}₽</div>
         <default-button
@@ -91,13 +94,22 @@ const createOrder = async () => {
   margin-bottom: 16px;
 }
 
-.sum-info {
-  margin-top: 20px;
-  padding: 16px;
-  border-top: 1px solid var(--border-color);
+.content {
   display: flex;
+  flex-direction: row;
+  gap: 50px;
+}
+
+.sum-info {
+  padding: 16px;
+  display: flex;
+  height: 50%;
+  min-width: 200px;
+  max-width: 250px;
   flex-direction: column;
   gap: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
 }
 
 .checkout-button {
@@ -118,5 +130,10 @@ const createOrder = async () => {
   color: indianred;
   font-size: 0.9em;
   margin-top: 8px;
+}
+
+.products-list {
+  display: flex;
+  flex-direction: column;
 }
 </style>
