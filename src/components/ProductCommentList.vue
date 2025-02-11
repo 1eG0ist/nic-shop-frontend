@@ -120,7 +120,6 @@ const addComment = async (formData) => {
 };
 
 watch(ratingRange, (newVal) => {
-  console.log("Значения мин макс изменены");
   debouncedFetchComments(0, newVal[0], newVal[1]);
 });
 

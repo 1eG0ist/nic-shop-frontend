@@ -7,7 +7,12 @@
           {{ category.isOpen ? '&#9660;' : '&#9658;' }}
         </button>
       </div>
-      <CategoryTree v-if="category.isOpen" :categories="category.children" @category-selected="handleCategorySelected" />
+      <CategoryTree
+          v-if="category.isOpen"
+          :categories="category.children"
+          :parent-category="category"
+          @category-selected="handleCategorySelected"
+      />
     </li>
   </ul>
 </template>
@@ -20,16 +25,28 @@ export default {
       type: Array,
       required: true,
     },
+    parentCategory: {
+      type: Object,
+      default: null,
+    },
   },
   methods: {
     toggleChildren(category) {
       category.isOpen = !category.isOpen;
     },
     selectCategory(category) {
-      this.$emit('category-selected', category);
+      const path = [category];
+      this.$emit('category-selected', {category: this.parentCategory ,path: path});
     },
-    handleCategorySelected(category) {
-      this.$emit('category-selected', category);
+    handleCategorySelected({category, path}) {
+      if (category) {
+        path.unshift(category);
+      }
+      if (this.parentCategory !== null) {
+        this.$emit('category-selected', {category: this.parentCategory, path: path});
+      } else {
+        this.$emit('category-selected', {path: path});
+      }
     },
   },
 };

@@ -50,8 +50,6 @@ const deleteCommentImage = async () => {
   try {
     if (props.comment.imagePath != null) {
       const response = await axios.delete(`/product_comments/image?id=${props.comment.id}`);
-      console.log(response);
-      console.log(response.status);
       if (response.status === 200) {
         props.comment.imagePath = null;
       }

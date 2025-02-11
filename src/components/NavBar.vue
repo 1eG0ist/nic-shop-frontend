@@ -58,6 +58,7 @@ const swapToCart = () => {
 }
 
 .catalogue {
+  margin-left: 30px;
   font-weight: bold;
   cursor: pointer;
 }
