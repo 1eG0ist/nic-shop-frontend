@@ -7,7 +7,7 @@ export class Product {
         this.count = data.count;
         this.imagePath = data.imagePath;
         this.sale = data.sale;
-        // this.categories = data.categories;
+        this.categories = data.categories ? data.categories : [];
     }
 
     id;
@@ -17,6 +17,7 @@ export class Product {
     count;
     imagePath;
     sale;
+    categories;
 
     static fromJsons(jsons) {
         return jsons.map(product => new Product(product));

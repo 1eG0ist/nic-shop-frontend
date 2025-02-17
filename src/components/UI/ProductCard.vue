@@ -1,5 +1,5 @@
 <template>
-  <div class="product-card" @click="swapToProductPage">
+  <div v-if="notDeleted" class="product-card" @click="swapToProductPage">
     <img class="product-card-img" type="png" :src="imageUrl" :alt="`${product.name} image`"/>
     <div class="product-info">
       <h2 class="product-name">{{ product.name }}</h2>
@@ -13,26 +13,54 @@
         <default-button
             @click.stop="addToCart"
             :disabled="props.product.count === 0"
-            class="add-to-cart-button">
+            class="action-button">
           В корзину
+        </default-button>
+        <default-button
+            @click.stop="swapToAdminProductPage"
+            v-if="isAdmin"
+            class="action-button">
+          Редактировать
+        </default-button>
+        <default-button
+            @click.stop="showDeleteConfirmation"
+            v-if="isAdmin"
+            class="action-button">
+          Удалить
         </default-button>
       </div>
     </div>
   </div>
+  <ConfirmationModal
+      :isOpen="isDeleteModalOpen"
+      title="Подтверждение удаления"
+      description="Вы уверены, что хотите удалить этот продукт?"
+      @cancel="cancelDelete"
+      @confirm="confirmDelete"
+  />
 </template>
 
 <script setup>
-import {defineProps, computed} from 'vue';
-import {Product} from "@/models/Product.js";
+import { defineProps, computed, ref } from 'vue';
+import { Product } from "@/models/Product.js";
 import DefaultButton from "@/components/UI/DefaultButton.vue";
 import store from "@/store/index.js";
 import router from "@/router/index.js";
+import ConfirmationModal from "@/components/modals/ConfirmationModal.vue";
+import axios from "@/api/axios.js";
 
 const props = defineProps({
   product: {
     type: Product,
     required: true,
   },
+});
+
+const notDeleted = ref(true);
+
+const isAdmin = computed(() => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  return user && user.roles && user.roles.some(role => role.name === 'ROLE_ADMIN');
 });
 
 const isAuthenticated = computed(() => store.getters['auth/isAuthenticated']);
@@ -64,14 +92,50 @@ const availabilityClass = computed(() => {
   }
 });
 
+const isDeleteModalOpen = ref(false);
+
 const swapToProductPage = () => {
+  store.dispatch('product/rememberProduct', props.product);
   router.push({
-    path: '/product',
-    query: { product: JSON.stringify(props.product) }
-  });}
+    path: `/product/${props.product.id}`
+  });
+};
+
+const swapToAdminProductPage = () => {
+  router.push({
+    path: `/product_administration/${props.product.id}`
+  });
+};
 
 const addToCart = () => {
   store.dispatch('cart/addToCart', props.product);
+};
+
+const showDeleteConfirmation = () => {
+  isDeleteModalOpen.value = true;
+};
+
+const cancelDelete = () => {
+  isDeleteModalOpen.value = false;
+};
+
+const confirmDelete = async () => {
+  isDeleteModalOpen.value = false;
+  try {
+    const response = await axios.delete(
+      `/products?id=${props.product.id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        }
+      }
+    );
+    if (response.status === 200) {
+      notDeleted.value = false;
+    }
+  } catch (error) {
+    console.error(error)
+  }
 };
 
 const imageUrl = computed(() => {
@@ -125,6 +189,7 @@ const imageUrl = computed(() => {
 
 .product-price {
   font-size: 1.2em;
+  gap: 10px;
   color: var(--primary-color);
   display: flex;
   flex-direction: row;
@@ -163,7 +228,7 @@ const imageUrl = computed(() => {
   align-self: center;
 }
 
-.add-to-cart-button {
+.action-button {
   background-color: var(--primary-color);
   color: white;
   border: none;
@@ -172,7 +237,7 @@ const imageUrl = computed(() => {
   cursor: pointer;
 }
 
-.add-to-cart-button:disabled {
+.action-button:disabled {
   cursor: not-allowed;
 }
 </style>
