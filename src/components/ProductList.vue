@@ -140,4 +140,8 @@ export default {
 .sort-selection {
   padding: 10px;
 }
+
+.product-list {
+  width: 100%;
+}
 </style>

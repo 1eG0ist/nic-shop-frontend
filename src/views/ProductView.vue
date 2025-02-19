@@ -9,22 +9,29 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import {ref, onMounted, computed} from 'vue';
 import { useRoute } from 'vue-router';
 import ProductInfo from '@/components/ProductInfo.vue';
 import ProductComments from '@/components/ProductCommentList.vue';
 import { Product } from '@/models/Product.js';
+import axios from "@/api/axios.js";
+import store from "@/store/index.js";
 
 const route = useRoute();
 const product = ref(null);
 
-onMounted(() => {
-  if (route.query.product) {
+const savedProduct = computed(() => store.getters['product/currentProduct']);
+
+onMounted(async () => {
+  const productId = Number(route.params.id);
+  if (savedProduct.value && savedProduct.value.id === productId) {
+    product.value = Product.fromJson(savedProduct.value);
+  } else {
     try {
-      const productData = JSON.parse(route.query.product);
-      product.value = Product.fromJson(productData);
+      const response = await axios.get(`/products?id=${productId}`);
+      product.value = Product.fromJson(response.data);
     } catch (error) {
-      console.error("Ошибка парсинга JSON:", error);
+      console.error(error);
     }
   }
 });
