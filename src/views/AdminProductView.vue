@@ -20,7 +20,10 @@
     <div class="categories">
       <label>Категории продукта:</label>
       <ul>
-        <li v-for="category in product.categories" :key="category.id">{{ category.name }}</li>
+        <li v-for="category in product.categories" :key="category.id" class="category-item">
+          {{ category.name }}
+          <button type="button" @click="removeCategory(category)">Удалить</button>
+        </li>
       </ul>
     </div>
 
@@ -102,6 +105,12 @@ const addCategory = () => {
     product.value.categories.push(selectedCategory.value);
     selectedCategory.value = null; // Сбросить выбранную категорию после добавления
   }
+};
+
+const removeCategory = (categoryToRemove) => {
+  product.value.categories = product.value.categories.filter(
+      (category) => category.id !== categoryToRemove.id
+  );
 };
 
 async function saveProduct() {
@@ -186,9 +195,29 @@ form {
 
 .categories li {
   margin: 5px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.categories li button {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.categories li button:hover {
+  background-color: #cc0000;
 }
 
 .category-select {
   margin-bottom: 20px;
+}
+
+.category-item {
+  gap: 10px;
 }
 </style>
